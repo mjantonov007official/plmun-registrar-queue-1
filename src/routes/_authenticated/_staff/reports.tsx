@@ -5,22 +5,54 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Download, Loader2, Printer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { countersQuery, servicesQuery } from "@/lib/queries";
-import { byHour, dailyVolume, groupStats, summarize, toCsv, waitMinutes, serviceMinutes } from "@/lib/analytics";
+import {
+  byHour,
+  dailyVolume,
+  groupStats,
+  summarize,
+  toCsv,
+  waitMinutes,
+  serviceMinutes,
+} from "@/lib/analytics";
 import { STATUS_LABEL, formatMinutes, formatTime, manilaDateKey, type Ticket } from "@/lib/queue";
 import { PageHeader } from "@/components/staff/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/_staff/reports")({
   head: () => ({
     meta: [
       { title: "Reports & Analytics — PLMun Queue Management System" },
-      { name: "description", content: "Queue volume, waiting times, peak hours and window performance for the PLMun Registrar." },
+      {
+        name: "description",
+        content:
+          "Queue volume, waiting times, peak hours and window performance for the PLMun Registrar.",
+      },
       { property: "og:title", content: "Reports & Analytics — PLMun Queue" },
       { property: "og:description", content: "Registrar queue analytics and reports." },
       { property: "og:type", content: "website" },
@@ -76,7 +108,9 @@ const volumeConfig = {
   other: { label: "Waiting / cancelled", color: "var(--chart-2)" },
 } satisfies ChartConfig;
 const hourConfig = { total: { label: "Tickets", color: "var(--chart-2)" } } satisfies ChartConfig;
-const serviceConfig = { total: { label: "Tickets", color: "var(--chart-1)" } } satisfies ChartConfig;
+const serviceConfig = {
+  total: { label: "Tickets", color: "var(--chart-1)" },
+} satisfies ChartConfig;
 
 function Reports() {
   const today = manilaDateKey(new Date());
@@ -112,17 +146,38 @@ function Reports() {
   const summary = summarize(tickets);
   const daily = dailyVolume(tickets, from, to).map((d) => ({
     ...d,
-    label: new Date(`${d.date}T00:00:00Z`).toLocaleDateString("en-PH", { month: "short", day: "numeric", timeZone: "UTC" }),
+    label: new Date(`${d.date}T00:00:00Z`).toLocaleDateString("en-PH", {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    }),
   }));
   const hourly = byHour(tickets);
   const perService = groupStats(tickets, (t) => t.service_id, serviceNames);
   const perCounter = groupStats(tickets, (t) => t.counter_id, counterNames);
   const perStaff = groupStats(tickets, (t) => t.served_by, staffNames);
-  const peak = hourly.reduce((m, h) => (h.total > m.total ? h : m), hourly[0] ?? { label: "—", total: 0 });
+  const peak = hourly.reduce(
+    (m, h) => (h.total > m.total ? h : m),
+    hourly[0] ?? { label: "—", total: 0 },
+  );
 
   function exportCsv() {
     const rows = [
-      ["Date", "Ticket", "Service", "Student ID", "Name", "Status", "Window", "Served by", "Issued", "Called", "Finished", "Wait (min)", "Service (min)"],
+      [
+        "Date",
+        "Ticket",
+        "Service",
+        "Student ID",
+        "Name",
+        "Status",
+        "Window",
+        "Served by",
+        "Issued",
+        "Called",
+        "Finished",
+        "Wait (min)",
+        "Service (min)",
+      ],
       ...tickets.map((t) => [
         t.queue_date,
         t.ticket_code,
@@ -181,7 +236,9 @@ function Reports() {
             onClick={() => setPreset(k)}
             className={cn(
               "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
-              preset === k ? "border-ink bg-ink text-ink-foreground" : "border-border bg-paper text-muted-foreground hover:text-foreground",
+              preset === k
+                ? "border-ink bg-ink text-ink-foreground"
+                : "border-border bg-paper text-muted-foreground hover:text-foreground",
             )}
           >
             {label}
@@ -189,9 +246,21 @@ function Reports() {
         ))}
         {preset === "custom" && (
           <div className="flex items-center gap-2">
-            <Input type="date" className="w-40 bg-paper" value={custom.from} max={today} onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))} />
+            <Input
+              type="date"
+              className="w-40 bg-paper"
+              value={custom.from}
+              max={today}
+              onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))}
+            />
             <span className="text-muted-foreground">to</span>
-            <Input type="date" className="w-40 bg-paper" value={custom.to} max={today} onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))} />
+            <Input
+              type="date"
+              className="w-40 bg-paper"
+              value={custom.to}
+              max={today}
+              onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))}
+            />
           </div>
         )}
         <div className="ml-auto">
@@ -237,7 +306,12 @@ function Reports() {
                   <ChartLegend content={<ChartLegendContent />} />
                   <Bar dataKey="completed" stackId="a" fill="var(--color-completed)" />
                   <Bar dataKey="no_show" stackId="a" fill="var(--color-no_show)" />
-                  <Bar dataKey="other" stackId="a" fill="var(--color-other)" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="other"
+                    stackId="a"
+                    fill="var(--color-other)"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ChartContainer>
             </Panel>
@@ -260,7 +334,13 @@ function Reports() {
                 <BarChart data={perService} layout="vertical" margin={{ left: 8 }}>
                   <CartesianGrid horizontal={false} />
                   <XAxis type="number" allowDecimals={false} tickLine={false} axisLine={false} />
-                  <YAxis type="category" dataKey="name" tickLine={false} axisLine={false} width={150} />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    tickLine={false}
+                    axisLine={false}
+                    width={150}
+                  />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="total" fill="var(--color-total)" radius={[0, 4, 4, 0]} />
                 </BarChart>
@@ -280,7 +360,11 @@ function Reports() {
             </Panel>
           </div>
 
-          <Panel title={`Ticket log (${tickets.length})`} subtitle="Latest 200 shown — export CSV for the full list" className="mt-6">
+          <Panel
+            title={`Ticket log (${tickets.length})`}
+            subtitle="Latest 200 shown — export CSV for the full list"
+            className="mt-6"
+          >
             <Table>
               <TableHeader>
                 <TableRow>
@@ -295,20 +379,23 @@ function Reports() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {[...tickets].reverse().slice(0, 200).map((t) => (
-                  <TableRow key={t.id}>
-                    <TableCell className="whitespace-nowrap">{t.queue_date}</TableCell>
-                    <TableCell className="ticket-code">{t.ticket_code}</TableCell>
-                    <TableCell>{serviceNames.get(t.service_id)}</TableCell>
-                    <TableCell>{t.student_id ?? "—"}</TableCell>
-                    <TableCell>{t.counter_id ? counterNames.get(t.counter_id) : "—"}</TableCell>
-                    <TableCell>{formatTime(t.created_at)}</TableCell>
-                    <TableCell>{formatMinutes(waitMinutes(t))}</TableCell>
-                    <TableCell>
-                      <Badge variant={t.status}>{STATUS_LABEL[t.status]}</Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {[...tickets]
+                  .reverse()
+                  .slice(0, 200)
+                  .map((t) => (
+                    <TableRow key={t.id}>
+                      <TableCell className="whitespace-nowrap">{t.queue_date}</TableCell>
+                      <TableCell className="ticket-code">{t.ticket_code}</TableCell>
+                      <TableCell>{serviceNames.get(t.service_id)}</TableCell>
+                      <TableCell>{t.student_id ?? "—"}</TableCell>
+                      <TableCell>{t.counter_id ? counterNames.get(t.counter_id) : "—"}</TableCell>
+                      <TableCell>{formatTime(t.created_at)}</TableCell>
+                      <TableCell>{formatMinutes(waitMinutes(t))}</TableCell>
+                      <TableCell>
+                        <Badge variant={t.status}>{STATUS_LABEL[t.status]}</Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 {!tickets.length && (
                   <TableRow>
                     <TableCell colSpan={8} className="py-10 text-center text-muted-foreground">
@@ -327,14 +414,36 @@ function Reports() {
 
 function Kpi({ label, value, dark }: { label: string; value: string | number; dark?: boolean }) {
   return (
-    <div className={cn("rounded-2xl border px-4 py-4 shadow-soft", dark ? "border-ink bg-ink text-ink-foreground" : "border-border bg-paper")}>
-      <p className={cn("text-xs font-semibold uppercase tracking-[0.14em]", dark ? "text-ink-muted" : "text-muted-foreground")}>{label}</p>
+    <div
+      className={cn(
+        "rounded-2xl border px-4 py-4 shadow-soft",
+        dark ? "border-ink bg-ink text-ink-foreground" : "border-border bg-paper",
+      )}
+    >
+      <p
+        className={cn(
+          "text-xs font-semibold uppercase tracking-[0.14em]",
+          dark ? "text-ink-muted" : "text-muted-foreground",
+        )}
+      >
+        {label}
+      </p>
       <p className={cn("ticket-code mt-1 text-3xl", dark && "text-signal")}>{value}</p>
     </div>
   );
 }
 
-function Panel({ title, subtitle, children, className }: { title: string; subtitle?: string; children: React.ReactNode; className?: string }) {
+function Panel({
+  title,
+  subtitle,
+  children,
+  className,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <section className={cn("rounded-2xl border border-border bg-paper p-5 shadow-soft", className)}>
       <h2 className="text-lg font-extrabold">{title}</h2>
@@ -345,7 +454,8 @@ function Panel({ title, subtitle, children, className }: { title: string; subtit
 }
 
 function StatsTable({ rows, label }: { rows: ReturnType<typeof groupStats>; label: string }) {
-  if (!rows.length) return <p className="py-6 text-center text-sm text-muted-foreground">No data yet.</p>;
+  if (!rows.length)
+    return <p className="py-6 text-center text-sm text-muted-foreground">No data yet.</p>;
   return (
     <Table>
       <TableHeader>

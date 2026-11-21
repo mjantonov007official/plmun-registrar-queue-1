@@ -25,7 +25,8 @@ export const Route = createFileRoute("/")({
       { title: "Get a Queue Number — PLMun Queue Management System" },
       {
         name: "description",
-        content: "Pick a registrar service at PLMun and get your queue number instantly. No more long lines.",
+        content:
+          "Pick a registrar service at PLMun and get your queue number instantly. No more long lines.",
       },
       { property: "og:title", content: "Get a Queue Number — PLMun Registrar" },
       {
@@ -97,10 +98,13 @@ function KioskPage() {
                 </div>
                 <h3 className="mt-5 text-xl font-extrabold">{s.name}</h3>
                 {s.description && (
-                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{s.description}</p>
+                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
+                    {s.description}
+                  </p>
                 )}
                 <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                  Get number <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  Get number{" "}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </button>
             ))}
@@ -125,7 +129,9 @@ function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="min-w-36 rounded-2xl bg-ink px-5 py-4 text-ink-foreground shadow-soft">
       <div className="ticket-code text-4xl text-signal">{value}</div>
-      <div className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-ink-muted">{label}</div>
+      <div className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-ink-muted">
+        {label}
+      </div>
     </div>
   );
 }
@@ -159,7 +165,9 @@ function TakeNumberDialog({ service, onClose }: { service: Service | null; onClo
     <Dialog open={!!service} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl font-extrabold">{service?.name}</DialogTitle>
+          <DialogTitle className="font-display text-2xl font-extrabold">
+            {service?.name}
+          </DialogTitle>
           <DialogDescription>2 — Enter your details to get your queue number.</DialogDescription>
         </DialogHeader>
         <form
@@ -200,7 +208,13 @@ function TakeNumberDialog({ service, onClose }: { service: Service | null; onClo
             />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="signal" size="xl" className="w-full" disabled={take.isPending}>
+            <Button
+              type="submit"
+              variant="signal"
+              size="xl"
+              className="w-full"
+              disabled={take.isPending}
+            >
               {take.isPending ? <Loader2 className="animate-spin" /> : null}
               Get my number
             </Button>

@@ -13,7 +13,11 @@ export const Route = createFileRoute("/display")({
   head: () => ({
     meta: [
       { title: "Now Serving — PLMun Queue Management System" },
-      { name: "description", content: "Live registrar display board showing which queue numbers are being served at each window." },
+      {
+        name: "description",
+        content:
+          "Live registrar display board showing which queue numbers are being served at each window.",
+      },
       { property: "og:title", content: "Now Serving — PLMun Registrar" },
       { property: "og:description", content: "Live registrar display board for PLMun." },
       { property: "og:type", content: "website" },
@@ -76,12 +80,22 @@ function DisplayBoard() {
           <div className="text-right">
             <p className="ticket-code text-3xl text-ink-foreground">
               {now
-                ? new Intl.DateTimeFormat("en-PH", { timeZone: QUEUE_TZ, hour: "numeric", minute: "2-digit", second: "2-digit" }).format(now)
+                ? new Intl.DateTimeFormat("en-PH", {
+                    timeZone: QUEUE_TZ,
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  }).format(now)
                 : "--:--"}
             </p>
             <p className="text-xs uppercase tracking-[0.18em] text-ink-muted">
               {now
-                ? new Intl.DateTimeFormat("en-PH", { timeZone: QUEUE_TZ, weekday: "long", month: "long", day: "numeric" }).format(now)
+                ? new Intl.DateTimeFormat("en-PH", {
+                    timeZone: QUEUE_TZ,
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  }).format(now)
                 : ""}
             </p>
           </div>
@@ -139,9 +153,7 @@ function DisplayBoard() {
                 <p className="mt-2 h-5 text-sm text-ink-muted">{c.service_name ?? "Available"}</p>
               </div>
             ))}
-            {data.counters.length === 0 && (
-              <p className="text-ink-muted">No windows are open.</p>
-            )}
+            {data.counters.length === 0 && <p className="text-ink-muted">No windows are open.</p>}
           </div>
         </section>
 

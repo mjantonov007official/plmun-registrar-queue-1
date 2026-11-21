@@ -7,7 +7,14 @@ import { PageHeader } from "@/components/staff/page-header";
 import { AdminOnly } from "@/components/staff/admin-only";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export const Route = createFileRoute("/_authenticated/_staff/staff")({
   head: () => ({
@@ -87,7 +94,8 @@ function StaffPage() {
       />
       {pending.length > 0 && (
         <div className="mb-6 rounded-2xl border border-signal bg-signal/15 px-5 py-4 text-sm">
-          <strong>{pending.length}</strong> account{pending.length > 1 ? "s" : ""} waiting for approval.
+          <strong>{pending.length}</strong> account{pending.length > 1 ? "s" : ""} waiting for
+          approval.
         </div>
       )}
       <section className="rounded-2xl border border-border bg-paper shadow-soft">
@@ -108,7 +116,8 @@ function StaffPage() {
               return (
                 <TableRow key={a.id}>
                   <TableCell className="font-medium">
-                    {a.full_name || "—"} {isSelf && <span className="text-muted-foreground">(you)</span>}
+                    {a.full_name || "—"}{" "}
+                    {isSelf && <span className="text-muted-foreground">(you)</span>}
                   </TableCell>
                   <TableCell>{a.email}</TableCell>
                   <TableCell>
@@ -122,17 +131,28 @@ function StaffPage() {
                     {!isSelf && (
                       <div className="flex justify-end gap-1">
                         {!a.roles.length && (
-                          <Button size="sm" onClick={() => grant.mutate({ userId: a.id, role: "staff" })}>
+                          <Button
+                            size="sm"
+                            onClick={() => grant.mutate({ userId: a.id, role: "staff" })}
+                          >
                             Approve as staff
                           </Button>
                         )}
                         {!isAdmin && a.roles.length > 0 && (
-                          <Button size="sm" variant="outline" onClick={() => grant.mutate({ userId: a.id, role: "admin" })}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => grant.mutate({ userId: a.id, role: "admin" })}
+                          >
                             Make admin
                           </Button>
                         )}
                         {isAdmin && (
-                          <Button size="sm" variant="outline" onClick={() => revoke.mutate({ userId: a.id, role: "admin" })}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => revoke.mutate({ userId: a.id, role: "admin" })}
+                          >
                             Remove admin
                           </Button>
                         )}
@@ -141,7 +161,10 @@ function StaffPage() {
                             size="sm"
                             variant="ghost"
                             className="text-destructive"
-                            onClick={() => confirm(`Remove all access for ${a.email}?`) && revoke.mutate({ userId: a.id })}
+                            onClick={() =>
+                              confirm(`Remove all access for ${a.email}?`) &&
+                              revoke.mutate({ userId: a.id })
+                            }
                           >
                             Remove access
                           </Button>

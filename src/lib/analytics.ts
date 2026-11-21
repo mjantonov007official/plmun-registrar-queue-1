@@ -2,7 +2,14 @@ import { manilaHour, minutesBetween, type Ticket } from "./queue";
 
 type T = Pick<
   Ticket,
-  "status" | "created_at" | "called_at" | "completed_at" | "queue_date" | "service_id" | "counter_id" | "served_by"
+  | "status"
+  | "created_at"
+  | "called_at"
+  | "completed_at"
+  | "queue_date"
+  | "service_id"
+  | "counter_id"
+  | "served_by"
 >;
 
 const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
@@ -50,7 +57,9 @@ export function eachDay(from: string, to: string): string[] {
 
 export function dailyVolume(tickets: T[], from: string, to: string) {
   const days = eachDay(from, to);
-  const map = new Map(days.map((d) => [d, { date: d, total: 0, completed: 0, no_show: 0, other: 0 }]));
+  const map = new Map(
+    days.map((d) => [d, { date: d, total: 0, completed: 0, no_show: 0, other: 0 }]),
+  );
   for (const t of tickets) {
     const row = map.get(t.queue_date);
     if (!row) continue;

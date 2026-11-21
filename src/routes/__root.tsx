@@ -77,9 +77,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "PLMun Queue Management System" },
-      { name: "description", content: "Get a registrar queue number, track your turn, and see who is being served at PLMun." },
+      {
+        name: "description",
+        content:
+          "Get a registrar queue number, track your turn, and see who is being served at PLMun.",
+      },
       { property: "og:title", content: "PLMun Queue Management System" },
-      { property: "og:description", content: "Get a registrar queue number, track your turn, and see who is being served at PLMun." },
+      {
+        property: "og:description",
+        content:
+          "Get a registrar queue number, track your turn, and see who is being served at PLMun.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

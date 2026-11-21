@@ -2,7 +2,9 @@
 export function playChime() {
   if (typeof window === "undefined") return;
   try {
-    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const Ctx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new Ctx();
     const notes = [880, 659.25];
     notes.forEach((freq, i) => {

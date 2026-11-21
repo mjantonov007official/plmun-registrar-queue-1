@@ -1,15 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  BellRing,
-  Check,
-  Loader2,
-  MegaphoneIcon,
-  PhoneForwarded,
-  UserX,
-  X,
-} from "lucide-react";
+import { BellRing, Check, Loader2, MegaphoneIcon, PhoneForwarded, UserX, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { countersQuery, servicesQuery } from "@/lib/queries";
@@ -25,15 +17,31 @@ import { useMe } from "@/hooks/use-staff";
 import { PageHeader } from "@/components/staff/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/_staff/dashboard")({
   head: () => ({
     meta: [
       { title: "Queue Console — PLMun Queue Management System" },
-      { name: "description", content: "Registrar console for calling, recalling and completing queue numbers." },
+      {
+        name: "description",
+        content: "Registrar console for calling, recalling and completing queue numbers.",
+      },
       { property: "og:title", content: "Queue Console — PLMun Queue" },
       { property: "og:description", content: "Registrar console for calling queue numbers." },
       { property: "og:type", content: "website" },
@@ -96,8 +104,14 @@ function Dashboard() {
   const now = useNow();
 
   const activeCounters = counters.filter((c) => c.is_active);
-  const [counterId, setCounterId, counterLoaded] = useStoredState<string | null>("plmun-counter", null);
-  const [handled, setHandled, handledLoaded] = useStoredState<string[] | null>("plmun-services", null);
+  const [counterId, setCounterId, counterLoaded] = useStoredState<string | null>(
+    "plmun-counter",
+    null,
+  );
+  const [handled, setHandled, handledLoaded] = useStoredState<string[] | null>(
+    "plmun-services",
+    null,
+  );
 
   useEffect(() => {
     if (counterLoaded && activeCounters.length && !activeCounters.some((c) => c.id === counterId)) {
@@ -106,17 +120,24 @@ function Dashboard() {
   }, [counterLoaded, activeCounters, counterId, setCounterId]);
 
   const activeServices = services.filter((s) => s.is_active);
-  const handledIds = handledLoaded && handled ? handled.filter((id) => activeServices.some((s) => s.id === id)) : activeServices.map((s) => s.id);
+  const handledIds =
+    handledLoaded && handled
+      ? handled.filter((id) => activeServices.some((s) => s.id === id))
+      : activeServices.map((s) => s.id);
   const serviceById = useMemo(() => new Map(services.map((s) => [s.id, s])), [services]);
   const counterById = useMemo(() => new Map(counters.map((c) => [c.id, c])), [counters]);
 
   const current = tickets.find((t) => t.status === "serving" && t.counter_id === counterId) ?? null;
-  const waiting = tickets.filter((t) => t.status === "waiting" && handledIds.includes(t.service_id));
+  const waiting = tickets.filter(
+    (t) => t.status === "waiting" && handledIds.includes(t.service_id),
+  );
   const allWaiting = tickets.filter((t) => t.status === "waiting");
   const otherServing = tickets.filter((t) => t.status === "serving" && t.counter_id !== counterId);
   const completed = tickets.filter((t) => t.status === "completed");
   const noShows = tickets.filter((t) => t.status === "no_show");
-  const waits = tickets.map((t) => minutesBetween(t.created_at, t.called_at)).filter((x): x is number => x != null);
+  const waits = tickets
+    .map((t) => minutesBetween(t.created_at, t.called_at))
+    .filter((x): x is number => x != null);
   const avgWait = waits.length ? waits.reduce((a, b) => a + b, 0) / waits.length : null;
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["tickets"] });
@@ -162,7 +183,12 @@ function Dashboard() {
       }
       const { error } = await supabase
         .from("tickets")
-        .update({ status: "serving", counter_id: counterId, served_by: me?.id ?? null, called_at: ts })
+        .update({
+          status: "serving",
+          counter_id: counterId,
+          served_by: me?.id ?? null,
+          called_at: ts,
+        })
         .eq("id", t.id)
         .eq("status", "waiting");
       if (error) throw error;
@@ -180,7 +206,10 @@ function Dashboard() {
     <div>
       <PageHeader
         title="Queue console"
-        subtitle={new Intl.DateTimeFormat("en-PH", { timeZone: "Asia/Manila", dateStyle: "full" }).format(new Date())}
+        subtitle={new Intl.DateTimeFormat("en-PH", {
+          timeZone: "Asia/Manila",
+          dateStyle: "full",
+        }).format(new Date())}
         actions={
           <Select value={counterId ?? ""} onValueChange={setCounterId}>
             <SelectTrigger className="w-44 bg-paper">
@@ -225,7 +254,10 @@ function Dashboard() {
                 <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
                   <Info label="Student ID" value={current.student_id ?? "—"} />
                   <Info label="Name" value={current.customer_name ?? "—"} />
-                  <Info label="Waited" value={formatMinutes(minutesBetween(current.created_at, current.called_at))} />
+                  <Info
+                    label="Waited"
+                    value={formatMinutes(minutesBetween(current.created_at, current.called_at))}
+                  />
                 </dl>
               </>
             ) : (
@@ -251,7 +283,10 @@ function Dashboard() {
               disabled={!current || busy}
               onClick={() =>
                 current &&
-                update.mutate({ id: current.id, patch: { called_at: ts(), recall_count: current.recall_count + 1 } })
+                update.mutate({
+                  id: current.id,
+                  patch: { called_at: ts(), recall_count: current.recall_count + 1 },
+                })
               }
             >
               <MegaphoneIcon /> Recall
@@ -259,14 +294,23 @@ function Dashboard() {
             <Button
               variant="boardGhost"
               disabled={!current || busy}
-              onClick={() => current && update.mutate({ id: current.id, patch: { status: "completed", completed_at: ts() } })}
+              onClick={() =>
+                current &&
+                update.mutate({
+                  id: current.id,
+                  patch: { status: "completed", completed_at: ts() },
+                })
+              }
             >
               <Check /> Complete
             </Button>
             <Button
               variant="boardGhost"
               disabled={!current || busy}
-              onClick={() => current && update.mutate({ id: current.id, patch: { status: "no_show", completed_at: ts() } })}
+              onClick={() =>
+                current &&
+                update.mutate({ id: current.id, patch: { status: "no_show", completed_at: ts() } })
+              }
             >
               <UserX /> No-show
             </Button>
@@ -275,7 +319,10 @@ function Dashboard() {
               disabled={!current || busy}
               onClick={() =>
                 current &&
-                update.mutate({ id: current.id, patch: { status: "waiting", counter_id: null, called_at: null } })
+                update.mutate({
+                  id: current.id,
+                  patch: { status: "waiting", counter_id: null, called_at: null },
+                })
               }
             >
               <X /> Return to queue
@@ -285,7 +332,9 @@ function Dashboard() {
 
         <section className="rounded-2xl border border-border bg-paper p-5 shadow-soft">
           <h2 className="text-lg font-extrabold">Services I handle</h2>
-          <p className="text-sm text-muted-foreground">"Call next" picks the earliest ticket from these.</p>
+          <p className="text-sm text-muted-foreground">
+            "Call next" picks the earliest ticket from these.
+          </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {activeServices.map((s) => {
               const on = handledIds.includes(s.id);
@@ -305,7 +354,12 @@ function Dashboard() {
                   )}
                 >
                   <span className="ticket-code">{s.code}</span> {s.name}
-                  <span className={cn("rounded-full px-1.5 text-xs", on ? "bg-primary-foreground/20" : "bg-secondary")}>
+                  <span
+                    className={cn(
+                      "rounded-full px-1.5 text-xs",
+                      on ? "bg-primary-foreground/20" : "bg-secondary",
+                    )}
+                  >
                     {count}
                   </span>
                 </button>
@@ -322,7 +376,10 @@ function Dashboard() {
               .map((c) => {
                 const t = otherServing.find((x) => x.counter_id === c.id);
                 return (
-                  <div key={c.id} className="rounded-xl border border-border bg-background px-3 py-2">
+                  <div
+                    key={c.id}
+                    className="rounded-xl border border-border bg-background px-3 py-2"
+                  >
                     <p className="text-xs text-muted-foreground">{c.name}</p>
                     <p className="ticket-code text-xl">{t?.ticket_code ?? "—"}</p>
                   </div>
@@ -372,17 +429,29 @@ function Dashboard() {
                 <TableCell>{serviceById.get(t.service_id)?.name}</TableCell>
                 <TableCell>{t.student_id ?? "—"}</TableCell>
                 <TableCell className="hidden md:table-cell">{t.customer_name ?? "—"}</TableCell>
-                <TableCell>{formatMinutes((now - new Date(t.created_at).getTime()) / 60000)}</TableCell>
+                <TableCell>
+                  {formatMinutes((now - new Date(t.created_at).getTime()) / 60000)}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
-                    <Button size="sm" variant="outline" disabled={busy || !counterId} onClick={() => serveNow.mutate(t)}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={busy || !counterId}
+                      onClick={() => serveNow.mutate(t)}
+                    >
                       Serve now
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       disabled={busy}
-                      onClick={() => update.mutate({ id: t.id, patch: { status: "cancelled", completed_at: ts() } })}
+                      onClick={() =>
+                        update.mutate({
+                          id: t.id,
+                          patch: { status: "cancelled", completed_at: ts() },
+                        })
+                      }
                       aria-label={`Cancel ${t.ticket_code}`}
                     >
                       <X />
@@ -432,8 +501,15 @@ function Dashboard() {
 
 function Kpi({ label, value, tone }: { label: string; value: number | string; tone?: "signal" }) {
   return (
-    <div className={cn("rounded-2xl border border-border bg-paper px-4 py-3 shadow-soft", tone === "signal" && "border-signal bg-signal/15")}>
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-paper px-4 py-3 shadow-soft",
+        tone === "signal" && "border-signal bg-signal/15",
+      )}
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        {label}
+      </p>
       <p className="ticket-code mt-1 text-3xl">{value}</p>
     </div>
   );

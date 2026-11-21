@@ -13,7 +13,10 @@ export const Route = createFileRoute("/ticket/$ticketId")({
   head: () => ({
     meta: [
       { title: "Your Queue Ticket — PLMun Queue Management System" },
-      { name: "description", content: "Track your registrar queue number live and see how many people are ahead of you." },
+      {
+        name: "description",
+        content: "Track your registrar queue number live and see how many people are ahead of you.",
+      },
       { property: "og:title", content: "Your Queue Ticket — PLMun Registrar" },
       { property: "og:description", content: "Track your registrar queue number live." },
       { property: "og:type", content: "website" },
@@ -30,7 +33,9 @@ export const Route = createFileRoute("/ticket/$ticketId")({
       <PublicHeader />
       <div className="mx-auto max-w-md px-4 py-24 text-center">
         <h1 className="text-3xl font-black">Ticket not found</h1>
-        <p className="mt-2 text-muted-foreground">This ticket link is invalid or has been removed.</p>
+        <p className="mt-2 text-muted-foreground">
+          This ticket link is invalid or has been removed.
+        </p>
         <Button asChild className="mt-6">
           <Link to="/">Get a new number</Link>
         </Button>
@@ -58,7 +63,8 @@ function TicketPage() {
     if (!data) return;
     if (prevStatus.current === "waiting" && data.status === "serving") {
       playChime();
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate?.([300, 150, 300]);
+      if (typeof navigator !== "undefined" && "vibrate" in navigator)
+        navigator.vibrate?.([300, 150, 300]);
     }
     prevStatus.current = data.status;
   }, [data]);
@@ -76,12 +82,17 @@ function TicketPage() {
             <BellRing className="size-6 shrink-0" />
             <div>
               <p className="font-display text-lg font-extrabold">It's your turn!</p>
-              <p className="text-sm opacity-90">Please proceed to {data.counter_name ?? "the counter"} now.</p>
+              <p className="text-sm opacity-90">
+                Please proceed to {data.counter_name ?? "the counter"} now.
+              </p>
             </div>
           </div>
         )}
 
-        <article className="ticket-stub animate-rise-in overflow-hidden" style={{ ["--notch-y" as string]: "58%" }}>
+        <article
+          className="ticket-stub animate-rise-in overflow-hidden"
+          style={{ ["--notch-y" as string]: "58%" }}
+        >
           <div className="stripe-signal h-2" />
           <div className="px-7 pb-6 pt-6 text-center">
             <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
@@ -91,7 +102,9 @@ function TicketPage() {
               <span>{data.queue_date}</span>
             </div>
             <p className="mt-6 text-sm font-semibold text-muted-foreground">{data.service_name}</p>
-            <p className="ticket-code mt-1 text-7xl text-foreground sm:text-8xl">{data.ticket_code}</p>
+            <p className="ticket-code mt-1 text-7xl text-foreground sm:text-8xl">
+              {data.ticket_code}
+            </p>
             <div className="mt-4 flex justify-center">
               <Badge variant={data.status}>{STATUS_LABEL[data.status]}</Badge>
             </div>
@@ -99,17 +112,38 @@ function TicketPage() {
           <div className="perforation mx-6" />
           <div className="grid grid-cols-2 gap-px bg-border/60">
             {serving ? (
-              <Cell icon={<BellRing className="size-4" />} label="Go to" value={data.counter_name ?? "—"} wide />
+              <Cell
+                icon={<BellRing className="size-4" />}
+                label="Go to"
+                value={data.counter_name ?? "—"}
+                wide
+              />
             ) : waiting ? (
               <>
-                <Cell icon={<Users className="size-4" />} label="Ahead of you" value={String(data.people_ahead)} />
-                <Cell icon={<Clock className="size-4" />} label="Est. wait" value={data.people_ahead === 0 ? "You're next" : `~${formatMinutes(data.estimated_wait_minutes)}`} />
+                <Cell
+                  icon={<Users className="size-4" />}
+                  label="Ahead of you"
+                  value={String(data.people_ahead)}
+                />
+                <Cell
+                  icon={<Clock className="size-4" />}
+                  label="Est. wait"
+                  value={
+                    data.people_ahead === 0
+                      ? "You're next"
+                      : `~${formatMinutes(data.estimated_wait_minutes)}`
+                  }
+                />
               </>
             ) : (
               <Cell
                 icon={<Clock className="size-4" />}
                 label={data.status === "completed" ? "Served at" : "Status"}
-                value={data.status === "completed" ? formatTime(data.called_at) : STATUS_LABEL[data.status]}
+                value={
+                  data.status === "completed"
+                    ? formatTime(data.called_at)
+                    : STATUS_LABEL[data.status]
+                }
                 wide
               />
             )}
@@ -154,7 +188,9 @@ function Cell({
       <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {icon} {label}
       </p>
-      <p className={`mt-1 text-2xl font-extrabold ${mono ? "ticket-code" : "font-display"}`}>{value}</p>
+      <p className={`mt-1 text-2xl font-extrabold ${mono ? "ticket-code" : "font-display"}`}>
+        {value}
+      </p>
     </div>
   );
 }

@@ -107,10 +107,12 @@ function StaffLayout() {
             Public screens
           </p>
           <a href="/display" target="_blank" rel="noreferrer" className={navItem}>
-            <MonitorPlay className="size-4" /> Display board <ExternalLink className="ml-auto size-3.5 opacity-60" />
+            <MonitorPlay className="size-4" /> Display board{" "}
+            <ExternalLink className="ml-auto size-3.5 opacity-60" />
           </a>
           <a href="/" target="_blank" rel="noreferrer" className={navItem}>
-            <Ticket className="size-4" /> Kiosk <ExternalLink className="ml-auto size-3.5 opacity-60" />
+            <Ticket className="size-4" /> Kiosk{" "}
+            <ExternalLink className="ml-auto size-3.5 opacity-60" />
           </a>
         </nav>
         <div className="mt-auto rounded-xl border border-sidebar-border p-3">
