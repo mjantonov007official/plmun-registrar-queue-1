@@ -1,0 +1,241 @@
+/*
+ * Tailwind v4 entry: config lives here, with no tailwind.config.js or PostCSS plugin.
+ * Keep every @import in this top block. Web fonts load via <link> in src/routes/__root.tsx.
+ */
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * PLMun Queue — "civic ticket" design system.
+ * Warm paper background, ink text, registrar green as primary, signal amber for
+ * queue numbers. Display board uses an ink surface with amber numerals.
+ */
+
+@theme inline {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "Public Sans", ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-signal: var(--signal);
+  --color-signal-foreground: var(--signal-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-line: var(--ink-line);
+  --color-paper: var(--paper);
+
+  --shadow-ticket: var(--shadow-ticket-value);
+  --shadow-soft: var(--shadow-soft-value);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.972 0.012 85);
+  --foreground: oklch(0.22 0.025 255);
+  --paper: oklch(0.99 0.006 85);
+  --card: oklch(0.99 0.006 85);
+  --card-foreground: oklch(0.22 0.025 255);
+  --popover: oklch(0.99 0.006 85);
+  --popover-foreground: oklch(0.22 0.025 255);
+  --primary: oklch(0.42 0.095 160);
+  --primary-foreground: oklch(0.985 0.01 160);
+  --secondary: oklch(0.935 0.02 85);
+  --secondary-foreground: oklch(0.25 0.03 255);
+  --muted: oklch(0.94 0.014 85);
+  --muted-foreground: oklch(0.5 0.025 255);
+  --accent: oklch(0.92 0.045 160);
+  --accent-foreground: oklch(0.3 0.08 160);
+  --destructive: oklch(0.56 0.2 28);
+  --destructive-foreground: oklch(0.985 0.01 28);
+  --border: oklch(0.88 0.018 85);
+  --input: oklch(0.86 0.02 85);
+  --ring: oklch(0.42 0.095 160);
+
+  --signal: oklch(0.8 0.155 75);
+  --signal-foreground: oklch(0.24 0.04 60);
+  --success: oklch(0.55 0.13 155);
+  --success-foreground: oklch(0.985 0.01 155);
+  --ink: oklch(0.19 0.025 255);
+  --ink-foreground: oklch(0.96 0.01 85);
+  --ink-muted: oklch(0.65 0.02 255);
+  --ink-line: oklch(0.3 0.025 255);
+
+  --chart-1: oklch(0.42 0.095 160);
+  --chart-2: oklch(0.78 0.15 75);
+  --chart-3: oklch(0.55 0.12 230);
+  --chart-4: oklch(0.6 0.17 30);
+  --chart-5: oklch(0.65 0.08 300);
+
+  --sidebar: oklch(0.19 0.025 255);
+  --sidebar-foreground: oklch(0.92 0.01 85);
+  --sidebar-primary: oklch(0.8 0.155 75);
+  --sidebar-primary-foreground: oklch(0.24 0.04 60);
+  --sidebar-accent: oklch(0.26 0.025 255);
+  --sidebar-accent-foreground: oklch(0.98 0.01 85);
+  --sidebar-border: oklch(0.3 0.025 255);
+  --sidebar-ring: oklch(0.8 0.155 75);
+
+  --shadow-ticket-value: 0 1px 0 oklch(0.88 0.018 85), 0 18px 40px -18px oklch(0.22 0.025 255 / 0.35);
+  --shadow-soft-value: 0 1px 2px oklch(0.22 0.025 255 / 0.06), 0 8px 24px -12px oklch(0.22 0.025 255 / 0.18);
+}
+
+.dark {
+  --background: oklch(0.19 0.025 255);
+  --foreground: oklch(0.96 0.01 85);
+  --paper: oklch(0.23 0.025 255);
+  --card: oklch(0.23 0.025 255);
+  --card-foreground: oklch(0.96 0.01 85);
+  --popover: oklch(0.23 0.025 255);
+  --popover-foreground: oklch(0.96 0.01 85);
+  --primary: oklch(0.7 0.13 160);
+  --primary-foreground: oklch(0.18 0.03 160);
+  --secondary: oklch(0.28 0.025 255);
+  --secondary-foreground: oklch(0.96 0.01 85);
+  --muted: oklch(0.28 0.025 255);
+  --muted-foreground: oklch(0.7 0.02 255);
+  --accent: oklch(0.3 0.05 160);
+  --accent-foreground: oklch(0.95 0.02 160);
+  --destructive: oklch(0.65 0.19 25);
+  --destructive-foreground: oklch(0.985 0.01 25);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.7 0.13 160);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* Paper ticket with punched side notches */
+  .ticket-stub {
+    position: relative;
+    background: var(--paper);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-ticket);
+    -webkit-mask:
+      radial-gradient(circle 14px at 0 var(--notch-y, 62%), transparent 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle 14px at 100% var(--notch-y, 62%), transparent 98%, #000) right / 51% 100% no-repeat;
+    mask:
+      radial-gradient(circle 14px at 0 var(--notch-y, 62%), transparent 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle 14px at 100% var(--notch-y, 62%), transparent 98%, #000) right / 51% 100% no-repeat;
+  }
+
+  .perforation {
+    border-top: 2px dashed var(--color-border);
+  }
+
+  .ticket-code {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .board-surface {
+    background-color: var(--ink);
+    color: var(--ink-foreground);
+    background-image:
+      radial-gradient(circle at 1px 1px, oklch(1 0 0 / 0.04) 1px, transparent 0);
+    background-size: 18px 18px;
+  }
+
+  .paper-grid {
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+  }
+
+  .stripe-signal {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--signal) 0 10px,
+      var(--ink) 10px 20px
+    );
+  }
+}
+
+@keyframes call-flash {
+  0%, 100% { background-color: transparent; }
+  20%, 60% { background-color: oklch(0.8 0.155 75 / 0.22); }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-call-flash {
+  animation: call-flash 1.4s ease-in-out 3;
+}
+
+@utility animate-rise-in {
+  animation: rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+}
