@@ -28,6 +28,7 @@ export type TicketStatusInfo = {
   people_ahead: number;
   now_serving: string | null;
   estimated_wait_minutes: number;
+  transaction_details: string[];
 };
 
 export type BoardData = {

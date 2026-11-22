@@ -99,6 +99,9 @@ export type Database = {
           status: Database["public"]["Enums"]["ticket_status"];
           student_id: string | null;
           ticket_code: string;
+          user_type: Database["public"]["Enums"]["visitor_type"];
+          transaction_details: string[];
+          transaction_note: string | null;
         };
         Insert: {
           called_at?: string | null;
@@ -115,6 +118,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["ticket_status"];
           student_id?: string | null;
           ticket_code: string;
+          user_type?: Database["public"]["Enums"]["visitor_type"];
+          transaction_details?: string[];
+          transaction_note?: string | null;
         };
         Update: {
           called_at?: string | null;
@@ -131,6 +137,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["ticket_status"];
           student_id?: string | null;
           ticket_code?: string;
+          user_type?: Database["public"]["Enums"]["visitor_type"];
+          transaction_details?: string[];
+          transaction_note?: string | null;
         };
         Relationships: [
           {
@@ -194,7 +203,10 @@ export type Database = {
         Args: {
           _customer_name?: string;
           _service_id: string;
-          _student_id?: string;
+          _student_id?: string | null;
+          _user_type: Database["public"]["Enums"]["visitor_type"];
+          _transaction_details: string[];
+          _transaction_note?: string;
         };
         Returns: Json;
       };
@@ -202,6 +214,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "staff";
       ticket_status: "waiting" | "serving" | "completed" | "no_show" | "cancelled";
+      visitor_type: "Student" | "Employee" | "Alumni" | "Parent" | "Visitor";
     };
     CompositeTypes: {
       [_ in never]: never;

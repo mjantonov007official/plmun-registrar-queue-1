@@ -152,6 +152,11 @@ function TicketPage() {
           </div>
         </article>
 
+        <section className="mt-4 rounded-xl border border-border bg-paper p-4 text-sm">
+          <p className="font-semibold">{data.service_name}</p>
+          <p className="mt-1 text-muted-foreground">{data.transaction_details.join(", ")}</p>
+        </section>
+
         <p className="no-print mt-6 text-center text-sm text-muted-foreground">
           This page updates automatically. Keep it open or take a photo of your number.
         </p>

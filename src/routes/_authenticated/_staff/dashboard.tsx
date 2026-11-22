@@ -254,6 +254,11 @@ function Dashboard() {
                 <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
                   <Info label="Student ID" value={current.student_id ?? "—"} />
                   <Info label="Name" value={current.customer_name ?? "—"} />
+                  <Info label="User type" value={current.user_type} />
+                  <Info
+                    label="Transaction(s)"
+                    value={`${current.transaction_details.join(", ")}${current.transaction_note ? `: ${current.transaction_note}` : ""}`}
+                  />
                   <Info
                     label="Waited"
                     value={formatMinutes(minutesBetween(current.created_at, current.called_at))}
@@ -401,7 +406,7 @@ function Dashboard() {
               <TableHead className="w-12">#</TableHead>
               <TableHead>Ticket</TableHead>
               <TableHead>Service</TableHead>
-              <TableHead>Student ID</TableHead>
+              <TableHead>User / request</TableHead>
               <TableHead className="hidden md:table-cell">Name</TableHead>
               <TableHead>Waiting</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -427,7 +432,16 @@ function Dashboard() {
                 <TableCell className="text-muted-foreground">{i + 1}</TableCell>
                 <TableCell className="ticket-code text-base">{t.ticket_code}</TableCell>
                 <TableCell>{serviceById.get(t.service_id)?.name}</TableCell>
-                <TableCell>{t.student_id ?? "—"}</TableCell>
+                <TableCell>
+                  <div className="font-medium">
+                    {t.user_type}
+                    {t.student_id ? ` · ${t.student_id}` : ""}
+                  </div>
+                  <div className="max-w-56 text-xs text-muted-foreground">
+                    {t.transaction_details.join(", ")}
+                    {t.transaction_note ? `: ${t.transaction_note}` : ""}
+                  </div>
+                </TableCell>
                 <TableCell className="hidden md:table-cell">{t.customer_name ?? "—"}</TableCell>
                 <TableCell>
                   {formatMinutes((now - new Date(t.created_at).getTime()) / 60000)}
